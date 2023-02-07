@@ -1,0 +1,7 @@
+.out/*
+.tmp/*
+.github/*
+Dockerfile*
+docker-compose.yml
+yarn-error.log
+npm-debug.log

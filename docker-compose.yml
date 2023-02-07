@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  obbtest:
+    build:
+      context: .
+      cache_from:
+        - ${DOCKER_CACHE:-tmp}
+    image: obbtest:latest
+    container_name: obbtest
+    hostname: obbtest
+    environment:
+      DEBUG: '*'
+    links:
+      - conformance-suite:conformance-suite
+    depends_on:
+      - conformance-suite
+
+  mongodb:
+    image: mongo:5.0.14
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./.tmp/mongo/data:/data/db
+
+  conformance-suite:
+    image: adrielcodeco/conformance-suite:latest
+    container_name: conformance-suite
+    ports:
+      - '8443:8443'
+    hostname: conformance-suite
+    links:
+      - mongodb:mongodb
+    depends_on:
+      - mongodb
