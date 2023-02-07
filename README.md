@@ -10,7 +10,7 @@ Para facilitar a execução dos testes de certificação do OpenBanking, foi cri
 
 ## Documentação
 
-A documentação pode ser encontrada no link [https://adrielcodeco.github.io/open-finance/open-banking/certification]([https://adrielcodeco.github.io/open-finance/open-banking/certification).
+A documentação pode ser encontrada no link [https://adrielcodeco.github.io/open-finance/open-banking/certification](https://adrielcodeco.github.io/open-finance/open-banking/certification).
 
 ## Sponsors
 
