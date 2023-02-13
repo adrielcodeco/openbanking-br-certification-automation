@@ -80,11 +80,25 @@ module.exports = function () {
       await this.scrollTo('#runningTestBrowser .visitBtn')
       await this.click('#runningTestBrowser .visitBtn')
       await this.scrollPageToTop()
+      await this.wait(1)
       let newPageIndex = await this.getOpenedPageIndex()
+      if (newPageIndex == null) {
+        await this.wait(1)
+        newPageIndex = await this.getOpenedPageIndex()
+      }
+      if (newPageIndex == null) {
+        await this.scrollTo('#runningTestBrowser .visitBtn')
+        await this.click('#runningTestBrowser .visitBtn')
+        await this.scrollPageToTop()
+        await this.wait(1)
+        newPageIndex = await this.getOpenedPageIndex()
+      }
       if (currentPageIndex < newPageIndex) {
         await this.switchToNextTab(newPageIndex - currentPageIndex)
-      } else {
+      } else if (currentPageIndex > newPageIndex) {
         await this.switchToPreviousTab(currentPageIndex - newPageIndex)
+      } else {
+        await this.switchToNextTab()
       }
     },
 
@@ -118,11 +132,13 @@ module.exports = function () {
 
     checkFailures: async function () {
       let failures = await this.grabTextFrom('.result-failure span')
+      logger.trace('failures: %d', failures)
       expect(failures).to.equal('0')
     },
 
     checkUrl: async function (regex) {
       const url = await this.grabCurrentUrl()
+      logger.trace('url expected: %s, got: %s', String(regex), String(url))
       expect(url).to.match(regex)
     },
 
@@ -152,11 +168,23 @@ module.exports = function () {
       await this.waitForElement('#logHeader #uploadBtn')
       const currentPageIndex = await this.getCurrentPageIndex()
       await this.click('#logHeader #uploadBtn')
+      await this.wait(1)
       let newPageIndex = await this.getOpenedPageIndex()
+      if (newPageIndex == null) {
+        await this.wait(1)
+        newPageIndex = await this.getOpenedPageIndex()
+      }
+      if (newPageIndex == null) {
+        await this.click('#logHeader #uploadBtn')
+        await this.wait(1)
+        newPageIndex = await this.getOpenedPageIndex()
+      }
       if (currentPageIndex < newPageIndex) {
         await this.switchToNextTab(newPageIndex - currentPageIndex)
-      } else {
+      } else if (currentPageIndex > newPageIndex) {
         await this.switchToPreviousTab(currentPageIndex - newPageIndex)
+      } else {
+        await this.switchToNextTab()
       }
       await this.waitForElement('#imageBlocks label.btn.btn-default')
       await this.click('#imageBlocks label.btn.btn-default')
